@@ -1,7 +1,7 @@
 package com.sergioruy.service;
 
 import com.sergioruy.config.RedisCache;
-import com.sergioruy.model.PixKey;
+import com.sergioruy.model.records.PixKey;
 import com.sergioruy.model.enumeration.KeyType;
 import com.sergioruy.model.enumeration.PersonType;
 import io.quarkus.logging.Log;

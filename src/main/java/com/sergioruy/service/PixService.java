@@ -1,7 +1,7 @@
 package com.sergioruy.service;
 
-import com.sergioruy.model.PixKey;
-import com.sergioruy.model.Typableline;
+import com.sergioruy.model.records.PixKey;
+import com.sergioruy.model.records.Typableline;
 import com.sergioruy.model.qrcode.QrCode;
 import com.sergioruy.model.qrcode.SendData;
 import jakarta.enterprise.context.ApplicationScoped;

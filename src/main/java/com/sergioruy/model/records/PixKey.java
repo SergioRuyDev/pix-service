@@ -1,4 +1,4 @@
-package com.sergioruy.model;
+package com.sergioruy.model.records;
 
 import com.sergioruy.model.enumeration.KeyType;
 import com.sergioruy.model.enumeration.PersonType;

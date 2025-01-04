@@ -1,6 +1,6 @@
 package com.sergioruy.model.qrcode;
 
-import com.sergioruy.model.PixKey;
+import com.sergioruy.model.records.PixKey;
 
 import java.math.BigDecimal;
 
