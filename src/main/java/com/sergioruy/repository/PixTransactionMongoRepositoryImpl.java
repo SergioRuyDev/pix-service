@@ -42,11 +42,10 @@ public class PixTransactionMongoRepositoryImpl implements PixTransactionReposito
                 .append(PixTransactionConverterApply.KEY_TYPE, pixKey.keyType())
                 .append(PixTransactionConverterApply.KEY, pixKey)
                 .append(PixTransactionConverterApply.LINE, typableline.line())
+                .append(PixTransactionConverterApply.STATUS, StatusPix.CREATED)
                 .append(PixTransactionConverterApply.DATE, LocalDateTime.now(ZoneId.of(AMERICA_SAO_PAULO)
                 ));
         getCollection().insertOne(document);
-        Log.infof("Inserting document into pix_transaction: {}", document.toJson());
-
     }
 
     private MongoCollection<Document> getCollection() {

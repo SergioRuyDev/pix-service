@@ -53,7 +53,7 @@ public class PixService {
 
         qrCode.save(Path.of(imagePath));
         String qrCodeString = qrCode.toString();
-        var typableline = new Typableline(uuid, qrCodeString);
+        var typableline = new Typableline(qrCodeString, uuid);
         saveTypableLine(key, value, typableline);
 
         return typableline;
