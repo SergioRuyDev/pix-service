@@ -4,6 +4,7 @@ import com.sergioruy.model.enumeration.StatusPix;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class PixTransaction {
@@ -25,6 +26,9 @@ public class PixTransaction {
 
     @Schema(description = "Status of Pix")
     private StatusPix status;
+
+    @Schema(description = "Date of Pix Transaction")
+    private LocalDateTime PixDate;
 
     public String getId() {
         return id;
@@ -72,6 +76,14 @@ public class PixTransaction {
 
     public void setValue(BigDecimal value) {
         this.value = value;
+    }
+
+    public LocalDateTime getPixDate() {
+        return PixDate;
+    }
+
+    public void setPixDate(LocalDateTime pixDate) {
+        PixDate = pixDate;
     }
 
     @Override

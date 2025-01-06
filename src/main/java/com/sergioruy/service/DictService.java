@@ -52,7 +52,7 @@ public class DictService {
 
     public PixKey findKeyByLegalPersonDocument(String key) {
         return new PixKey(
-                KeyType.EMAIL,
+                KeyType.DOCUMENT,
                 key,
                 ispb,
                 PersonType.LEGAL_PERSON,
@@ -64,7 +64,7 @@ public class DictService {
 
     public PixKey findKeyByNaturalPersonDocument(String key){
         return new PixKey(
-                KeyType.EMAIL,
+                KeyType.DOCUMENT,
                 key,
                 ispb,
                 PersonType.NATURAL_PERSON,
