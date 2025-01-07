@@ -16,9 +16,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @ApplicationScoped
 public class PixService {
@@ -74,6 +72,10 @@ public class PixService {
 
     private void processarPix() {
 
+    }
+
+    public List<PixTransaction> findPixTransactions(final Date initDate, final Date endDate) {
+        return pixTransactionDomain.findPixTransactionByDate(initDate, endDate);
     }
 
     public Optional<PixTransaction> rejectPixTransaction(final String uuid) {

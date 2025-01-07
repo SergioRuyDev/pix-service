@@ -1,13 +1,16 @@
 package com.sergioruy.model;
 
 import com.sergioruy.model.enumeration.StatusPix;
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class PixTransaction {
+@MongoEntity(collection = "pix_transaction")
+public class PixTransaction extends PanacheMongoEntity {
 
     @Schema(description = "Transaction identifier")
     private String id;

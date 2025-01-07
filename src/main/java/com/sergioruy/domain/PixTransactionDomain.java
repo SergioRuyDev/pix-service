@@ -4,24 +4,32 @@ import com.sergioruy.model.PixTransaction;
 import com.sergioruy.model.enumeration.StatusPix;
 import com.sergioruy.model.records.PixKey;
 import com.sergioruy.model.records.Typableline;
+import com.sergioruy.repository.PixTransactionPanacheRepository;
 import com.sergioruy.repository.PixTransactionRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.bson.Document;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class PixTransactionDomain {
 
-    private final PixTransactionRepository pixTransactionRepository;
+//    private final PixTransactionRepository pixTransactionRepository;
+//
+//    public PixTransactionDomain(PixTransactionRepository pixTransactionRepository) {
+//        this.pixTransactionRepository = pixTransactionRepository;
+//    }
 
-    public PixTransactionDomain(PixTransactionRepository pixTransactionRepository) {
+    private final PixTransactionPanacheRepository pixTransactionRepository;
+
+    public PixTransactionDomain(PixTransactionPanacheRepository pixTransactionRepository) {
         this.pixTransactionRepository = pixTransactionRepository;
     }
 
-    @Transactional
     public void addPixTransaction(final Typableline typableline, final BigDecimal amount, final PixKey pixKey) {
         pixTransactionRepository.addPixTransaction(typableline, amount, pixKey);
     }
@@ -34,6 +42,10 @@ public class PixTransactionDomain {
         }
     }
 
+    public List<PixTransaction> findPixTransactionByDate(final Date InitDate, final Date EndDate) {
+        return pixTransactionRepository.findPixTransactions(InitDate, EndDate);
+    }
+
     public Optional<PixTransaction> rejectPixTransaction(final String uuid) {
         return pixTransactionRepository.changeTransactionStatus(uuid, StatusPix.REJECTED);
     }
@@ -43,7 +55,6 @@ public class PixTransactionDomain {
     }
 
     public Optional<PixTransaction> findById(final String uuid) {
-        Optional<Document> optionalDocument = pixTransactionRepository.findOne(uuid);
-        return optionalDocument.map(PixTransactionConverterApply::apply);
+        return pixTransactionRepository.findOne(uuid);
     }
 }
