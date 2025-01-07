@@ -40,7 +40,7 @@ public class PixTransactionMongoRepositoryImpl implements PixTransactionReposito
         document.append(PixTransactionConverterApply.ID, typableline.uuid())
                 .append(PixTransactionConverterApply.VALUE, value)
                 .append(PixTransactionConverterApply.KEY_TYPE, pixKey.keyType())
-                .append(PixTransactionConverterApply.KEY, pixKey)
+                .append(PixTransactionConverterApply.KEY, pixKey.key())
                 .append(PixTransactionConverterApply.LINE, typableline.line())
                 .append(PixTransactionConverterApply.STATUS, StatusPix.CREATED)
                 .append(PixTransactionConverterApply.DATE, LocalDateTime.now(ZoneId.of(AMERICA_SAO_PAULO)

@@ -64,10 +64,10 @@ public class PixResource {
             @APIResponse(responseCode = "404", description = "Resource Not Found."),
     })
     public Response generateTypablelineWithNaturalPersonDocument(final Pix pix) {
-        var chave = dictService.findKeyByNaturalPersonDocument(pix.key());
+        var key = dictService.findKeyByNaturalPersonDocument(pix.key());
 
-        if (Objects.nonNull(chave)) {
-            return Response.ok(pixService.generateTypableline(chave, pix.value(), pix.originCity())).build();
+        if (Objects.nonNull(key)) {
+            return Response.ok(pixService.generateTypableline(key, pix.value(), pix.originCity())).build();
         }
 
         return null;
