@@ -83,7 +83,7 @@ public class DictService {
             return KeyType.EMAIL;
         } else if (key.length() == 14) {
             return KeyType.DOCUMENT;
-        } else if (key.length() == 11 && !key.startsWith("+")) {
+        } else if (key.length() >= 11 && !key.startsWith("+")) {
             return KeyType.DOCUMENT;
         } else if (key.startsWith("+")) {
             return KeyType.PHONE;

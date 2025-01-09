@@ -100,4 +100,12 @@ public class PixTransaction extends PanacheMongoEntity {
     public int hashCode() {
         return Objects.hashCode(getId());
     }
+
+    @Override
+    public String toString() {
+        return "PixTransaction{" +
+                "id='" + id + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

@@ -2,7 +2,6 @@ package com.sergioruy.api;
 
 import com.sergioruy.model.PixTransaction;
 import com.sergioruy.model.records.CreatePixTypableLineRequest;
-import com.sergioruy.model.records.Pix;
 import com.sergioruy.model.records.Typableline;
 import com.sergioruy.service.DictService;
 import com.sergioruy.service.PixService;

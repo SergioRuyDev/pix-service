@@ -35,7 +35,7 @@ public class PixTransactionPanacheRepository implements PanacheMongoRepository<P
         pixTransaction.setValue(value);
         pixTransaction.setLine(typableline.line());
         pixTransaction.setKeyType(pixKey.keyType().toString());
-        pixTransaction.persist();
+        pixTransaction.persistOrUpdate();
     }
 
     public Optional<PixTransaction> changeTransactionStatus(String uuid, StatusPix statusPix) {
