@@ -1,6 +1,7 @@
 package com.sergioruy.api;
 
 import com.sergioruy.model.PixTransaction;
+import com.sergioruy.model.records.CreatePixTypableLineRequest;
 import com.sergioruy.model.records.Pix;
 import com.sergioruy.model.records.Typableline;
 import com.sergioruy.service.DictService;
@@ -35,9 +36,9 @@ public class PixResource {
 
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("line-legal-person")
+    @Path("line")
     @POST
-    @Operation(description = "API for creates a Pix Typableline from cpnj.")
+    @Operation(description = "API for creates a Pix Typableline.")
     @APIResponseSchema(Typableline.class)
     @APIResponses(value = {
             @APIResponse(responseCode = "200",  description = "Return OK"),
@@ -46,36 +47,12 @@ public class PixResource {
             @APIResponse(responseCode = "403", description = "Authorization error from API."),
             @APIResponse(responseCode = "404", description = "Resource Not Found."),
     })
-    public Response generateTypablelineWithLegalPersonDocument(final Pix pix) {
-        var pixKey = dictService.findKeyByLegalPersonDocument(pix.key());
+    public Response generateTypableline(final CreatePixTypableLineRequest pix) {
+        var pixKey = dictService.buildPixKeyByRequest(pix);
 
         if (Objects.nonNull(pixKey)) {
-            return Response.ok(pixService.generateTypableline(pixKey, pix.value(), pix.originCity())).build();
+            return Response.ok(pixService.generateTypableline(pixKey, pix.amount(), pix.originCity())).build();
         }
-
-        return null;
-    }
-
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("line-natural-person")
-    @POST
-    @Operation(description = "API for creates a Pix Typableline from cpf.")
-    @APIResponseSchema(Typableline.class)
-    @APIResponses(value = {
-            @APIResponse(responseCode = "200",  description = "Return OK"),
-            @APIResponse(responseCode = "201",  description = "Return OK with created transaction."),
-            @APIResponse(responseCode = "401", description = "Authenticate error from API."),
-            @APIResponse(responseCode = "403", description = "Authorization error from API."),
-            @APIResponse(responseCode = "404", description = "Resource Not Found."),
-    })
-    public Response generateTypablelineWithNaturalPersonDocument(final Pix pix) {
-        var key = dictService.findKeyByNaturalPersonDocument(pix.key());
-
-        if (Objects.nonNull(key)) {
-            return Response.ok(pixService.generateTypableline(key, pix.value(), pix.originCity())).build();
-        }
-
         return null;
     }
 

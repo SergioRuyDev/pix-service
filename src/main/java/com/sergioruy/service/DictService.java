@@ -1,6 +1,7 @@
 package com.sergioruy.service;
 
 import com.sergioruy.config.RedisCache;
+import com.sergioruy.model.records.CreatePixTypableLineRequest;
 import com.sergioruy.model.records.PixKey;
 import com.sergioruy.model.enumeration.KeyType;
 import com.sergioruy.model.enumeration.PersonType;
@@ -36,8 +37,8 @@ public class DictService {
     public PixKey findPixKeyDetailsOnCache(String key) {
         var pixKey = findCachedPixKey(key);
         if (Objects.isNull(pixKey)) { // if null will return pix key from property
-            var fakePixKey = findKeyByNaturalPersonDocument(key);
-            redisCache.set(key, findKeyByNaturalPersonDocument(key));
+            var fakePixKey = buildPixKeyByProperties(key);
+            redisCache.set(key, buildPixKeyByProperties(key));
             return fakePixKey;
         }
 
@@ -50,19 +51,22 @@ public class DictService {
         return pixKey;
     }
 
-    public PixKey findKeyByLegalPersonDocument(String key) {
+    public PixKey buildPixKeyByRequest(CreatePixTypableLineRequest request) {
+        KeyType keyType = determineKeyType(request.key());
+        PersonType personType = determinePersonType(request.document());
+
         return new PixKey(
-                KeyType.DOCUMENT,
-                key,
-                ispb,
-                PersonType.LEGAL_PERSON,
-                document,
-                name,
+                keyType,
+                request.key(),
+                request.ispb(),
+                personType,
+                request.document(),
+                request.name(),
                 LocalDateTime.now()
         );
     }
 
-    public PixKey findKeyByNaturalPersonDocument(String key){
+    public PixKey buildPixKeyByProperties(String key){
         return new PixKey(
                 KeyType.DOCUMENT,
                 key,
@@ -72,5 +76,27 @@ public class DictService {
                 name,
                 LocalDateTime.now()
         );
+    }
+
+    private KeyType determineKeyType(String key) {
+        if (key.contains("@")) {
+            return KeyType.EMAIL;
+        } else if (key.length() == 14) {
+            return KeyType.DOCUMENT;
+        } else if (key.length() == 11 && !key.startsWith("+")) {
+            return KeyType.DOCUMENT;
+        } else if (key.startsWith("+")) {
+            return KeyType.PHONE;
+        } else {
+            throw new IllegalArgumentException("Invalid key format: " + key);
+        }
+    }
+
+    private PersonType determinePersonType(String document) {
+        if (document.length() == 14) {
+            return PersonType.LEGAL_PERSON;
+        } else {
+            return PersonType.NATURAL_PERSON;
+        }
     }
 }
