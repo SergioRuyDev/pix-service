@@ -7,6 +7,8 @@ import com.sergioruy.model.records.PixKey;
 import com.sergioruy.model.records.Typableline;
 import com.sergioruy.model.qrcode.QrCode;
 import com.sergioruy.model.qrcode.SendData;
+import com.sergioruy.repository.S3ImageClientRepository;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.BufferedInputStream;
@@ -25,22 +27,26 @@ public class PixService {
 
     private final PixTransactionDomain pixTransactionDomain;
     private final TypablelineCache typablelineCache;
+    private final S3ImageClientRepository s3ImageClientRepository;
 
-    public PixService(PixTransactionDomain pixTransactionDomain, TypablelineCache typablelineCache) {
+    public PixService(
+            PixTransactionDomain pixTransactionDomain,
+                      TypablelineCache typablelineCache,
+            S3ImageClientRepository s3ImageClientRepository)
+    {
         this.pixTransactionDomain = pixTransactionDomain;
         this.typablelineCache = typablelineCache;
+        this.s3ImageClientRepository = s3ImageClientRepository;
     }
 
-    public BufferedInputStream generateQrCode(final String uuid) throws IOException {
+    public BufferedInputStream generateQrCode(final String uuid) {
+        return getQrCodeInputStream(uuid);
+    }
 
-        // todo recuperar do cache
-        var imagePath = QRCODE_PATH + uuid + ".png";
-
-        try {
-            return new BufferedInputStream(new FileInputStream(imagePath));
-        } finally {
-            Files.delete(Paths.get(imagePath));
-        }
+    private BufferedInputStream getQrCodeInputStream(String uuid) {
+        var qrCodeInputStream = s3ImageClientRepository.getObjects(uuid).asInputStream();
+        Log.infof("Get QR Code from S3 %s", uuid);
+        return new BufferedInputStream(qrCodeInputStream);
     }
 
     public Typableline generateTypableline(final PixKey key, BigDecimal value, String originCity) {
@@ -50,11 +56,17 @@ public class PixService {
         var imagePath = QRCODE_PATH + uuid + ".png";
 
         qrCode.save(Path.of(imagePath));
+        saveImage(imagePath, uuid);
         String qrCodeString = qrCode.toString();
         var typableline = new Typableline(qrCodeString, uuid);
         saveTypableLine(key, value, typableline);
 
         return typableline;
+    }
+
+    private void saveImage(String imagePath, String uuid) {
+        s3ImageClientRepository.putObject(Paths.get(imagePath), uuid);
+        Log.infof("Push image to S3 %s", imagePath);
     }
 
     private void saveTypableLine(PixKey key, BigDecimal value, Typableline typableline) {
